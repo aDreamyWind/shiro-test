@@ -8,7 +8,8 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpSession;
 
 /**
  * @author 小韩
@@ -19,9 +20,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("myController")
 public class MyController {
 
+    @GetMapping("login")
+    public String login(){
+        return "login";
+    }
+
     @GetMapping("userLogin")
-    @ResponseBody
-    public String userLogin(String name, String pwd) {
+    public String userLogin(String name, String pwd, HttpSession session) {
         // 获取subject对象
         Subject subject = SecurityUtils.getSubject();
         // 封装请求数据到token
@@ -29,7 +34,8 @@ public class MyController {
         // 调用login
         try {
             subject.login(token);
-            return "登陆成功";
+            session.setAttribute("user", token.getPrincipal().toString());
+            return "main";
         } catch (AuthenticationException e) {
             return "登陆失败";
         }
