@@ -4,11 +4,11 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
@@ -51,11 +51,20 @@ public class MyController {
     }
 
     // 登陆认证验证角色
-    // @RequiresRoles("admin")
-    // @GetMapping("userLoginRoles")
-    // @RequestBody
-    // public String userLoginRoles() {
-    //     System.out.println("登陆验证角色成功");
-    //     return "登陆验证角色成功";
-    // }
+    @RequiresRoles("admin")
+    @GetMapping("userLoginRoles")
+    @ResponseBody
+    public String userLoginRoles() {
+        System.out.println("登陆验证角色成功");
+        return "登陆验证角色成功";
+    }
+
+    // 登陆认证验证权限
+    @RequiresPermissions("add")
+    @GetMapping("userLoginPermissions")
+    @ResponseBody
+    public String userLoginPermissions() {
+        System.out.println("登陆验证权限成功");
+        return "登陆验证权限成功";
+    }
 }
